@@ -1,0 +1,53 @@
+swagger: "2.0"
+info:
+  description: "Magneto quiere reclutar la mayor cantidad de mutantes para poder luchar
+contra los X-Men.
+Te ha contratado a ti para que desarrolles un proyecto que detecte si un
+humano es mutante basándose en su secuencia de ADN."
+  version: "1.0.0"
+  title: "Prueba Mercado Libre"
+host: "jrqbvduuu6.execute-api.us-east-1.amazonaws.com"
+basePath: "/default"
+schemes:
+  - "https"
+  - "http"
+paths:
+  /Mutant:
+    post:
+      tags:
+        - "Mutant"
+      summary: "Add a new Mutant"
+      description: ""
+      operationId: "addMutant"
+      consumes:
+        - "application/json"
+        - "application/xml"
+      produces:
+        - "application/xml"
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Adn object that needs to be added"
+          required: true
+          schema:
+            $ref: "#/definitions/Mutant"
+      responses:
+        "200":
+          description: "OK"
+        "400":
+          description: "Bad request"
+        "403":
+          description: "Forbidden"
+definitions:
+  Mutant:
+    type: "object"
+    required:
+      - "dna"
+    properties:
+      dna:
+        type: "array"
+        items:
+          type: "string"
+    xml:
+      name: "Mutant"
