@@ -1,29 +1,23 @@
 swagger: "2.0"
 info:
-  description: "Magneto quiere reclutar la mayor cantidad de mutantes para poder luchar
-contra los X-Men.
-Te ha contratado a ti para que desarrolles un proyecto que detecte si un
-humano es mutante basándose en su secuencia de ADN."
+  description: "Identificar si un ADN (array de caracteres) pertenece o no a un mutante. Se sabe que es mutante si se encuentra una secuencia de cuatro caracteres iguales de manera en horizontal, vertical u oblicua. Los caracteres permitidos en un ADN son: A, T, C, G."
   version: "1.0.0"
   title: "Prueba Mercado Libre"
-host: "jrqbvduuu6.execute-api.us-east-1.amazonaws.com"
-basePath: "/default"
+host: "6d4611tose.execute-api.us-east-1.amazonaws.com"
+basePath: ""
 schemes:
   - "https"
-  - "http"
 paths:
-  /Mutant:
+  /mutant:
     post:
       tags:
         - "Mutant"
-      summary: "Add a new Mutant"
+      summary: "validate DNA"
       description: ""
       operationId: "addMutant"
       consumes:
         - "application/json"
-        - "application/xml"
       produces:
-        - "application/xml"
         - "application/json"
       parameters:
         - in: "body"
@@ -34,11 +28,13 @@ paths:
             $ref: "#/definitions/Mutant"
       responses:
         "200":
-          description: "OK"
+          description: "Is a mutant"
         "400":
           description: "Bad request"
         "403":
-          description: "Forbidden"
+          description: "Is not a mutant"
+        "500":
+          description: "Internal serve error"
 definitions:
   Mutant:
     type: "object"
@@ -49,5 +45,6 @@ definitions:
         type: "array"
         items:
           type: "string"
+        example: ["CTGCGA","GGGGGG","TAAAGA","AAAAGG","CTTAGA","TCAGTA"]
     xml:
       name: "Mutant"
