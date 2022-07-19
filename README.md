@@ -49,3 +49,5 @@ Una vez se finaliza el proceso de validación se emite una notificación a un t�
 ## Pruebas unitarias
 Cobertura 92.3%
 Uso de https://github.com/vektra/mockery en generación de mocks
+
+![Captura de Pantalla 2022-07-19 a la(s) 8 42 39 a m](https://user-images.githubusercontent.com/25367590/179765173-9b5c9251-999e-4a26-9556-9b5d960a93c2.png)
