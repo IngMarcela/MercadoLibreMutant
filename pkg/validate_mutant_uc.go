@@ -1,27 +1,40 @@
 package pkg
 
 import (
+	"encoding/json"
 	"errors"
+	"log"
+	"strings"
 )
 
 const messageValidateCaracters = "La información ingresada, No se puede procesar, los Datos no son los permitidos!"
-const messageValidateDimensionsMatriz = "la información ingresada, No se puede procesar, no es una matriz de NxN!"
+const messageValidateDimensionsMatrix = "la información ingresada, No se puede procesar, no es una matriz de NxN!"
 const messageValidateMinimumSize = "la información ingresada, No se puede procesar, La dimension de la matriz debe ser superior a 4 columnas y 4 filas!"
 
 type InputEvent struct {
-	Dna []string `json:"stats"`
+	Dna []string `json:"dna"`
 }
 
 type Adn struct {
 	Id string
 }
 
+type Message struct {
+	Dna    string `json:"dna"`
+	Result bool   `json:"result"`
+}
+
 type RequestValidationInterface interface {
 	IsValidateChar(char string) bool
 }
 
+type NotificationInterface interface {
+	SendNotification(mutant string) error
+}
+
 type ValidateMutantUC struct {
 	RequestValidationInterface RequestValidationInterface
+	Notification               NotificationInterface
 }
 
 func (vm *ValidateMutantUC) Handler(request []string) (bool, error) {
@@ -42,38 +55,50 @@ func (vm *ValidateMutantUC) execute(request []string) (bool, error) {
 	}
 
 	isMutantResult := isMutant(informationDna)
-	if !isMutantResult {
-		return false, nil
+
+	message := Message{
+		Dna:    strings.Join(request, " "),
+		Result: isMutantResult,
 	}
+
+	messageJson, err := json.Marshal(message)
+
+	if err != nil {
+		log.Println(err.Error())
+
+		return false, err
+	}
+
+	vm.Notification.SendNotification(string(messageJson))
 
 	return isMutantResult, nil
 }
 
 func (vm *ValidateMutantUC) validateAndTransformToArray(dna []string) ([][]string, error) {
-	matrizDna := make([][]string, len(dna[0]))
+	matrixDna := make([][]string, len(dna[0]))
 	rows := len(dna)
 	columns := len(dna[0])
 	if rows != columns {
-		return matrizDna, errors.New(messageValidateDimensionsMatriz)
+		return matrixDna, errors.New(messageValidateDimensionsMatrix)
 	}
 	for i := 0; i < len(dna[0]); i++ {
 		chars := []rune(dna[i])
-		matrizDna[i] = make([]string, len(chars))
+		matrixDna[i] = make([]string, len(chars))
 		for j := 0; j < len(chars); j++ {
 			char := string(chars[j])
 			if vm.RequestValidationInterface.IsValidateChar(char) {
-				matrizDna[i][j] = char
+				matrixDna[i][j] = char
 			} else {
-				return matrizDna, errors.New(messageValidateCaracters)
+				return matrixDna, errors.New(messageValidateCaracters)
 			}
 		}
 	}
 
 	if rows < 4 && columns < 4 {
-		return matrizDna, errors.New(messageValidateMinimumSize)
+		return matrixDna, errors.New(messageValidateMinimumSize)
 	}
 
-	return matrizDna, nil
+	return matrixDna, nil
 }
 
 func isMutant(dna [][]string) bool {
@@ -145,8 +170,10 @@ func isOblique(dna [][]string, rta bool) bool {
 
 func NewValidateMutantUC(
 	RequestValidationInterface RequestValidationInterface,
+	Notification NotificationInterface,
 ) *ValidateMutantUC {
 	return &ValidateMutantUC{
 		RequestValidationInterface: RequestValidationInterface,
+		Notification:               Notification,
 	}
 }
