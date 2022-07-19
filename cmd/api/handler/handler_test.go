@@ -15,7 +15,7 @@ func TestValidateMutantHandleFindMutant(t *testing.T) {
 	data, _ := json.Marshal(dna)
 	mockValidateMutantUC := &ValidateMutantUCMock{}
 	vm := NewHandler(mockValidateMutantUC)
-	information := vm.getBodyOfRequest(events.APIGatewayProxyRequest{Body: string(data)})
+	information, _ := vm.getBodyOfRequest(events.APIGatewayProxyRequest{Body: string(data)})
 	mockValidateMutantUC.On("Handler", information).Return(true, nil)
 
 	response, _ := vm.Handle(events.APIGatewayProxyRequest{Body: string(data)})
@@ -28,7 +28,7 @@ func TestValidateMutantHandleNotFindMutant(t *testing.T) {
 	data, _ := json.Marshal(dna)
 	mockValidateMutantUC := &ValidateMutantUCMock{}
 	vm := NewHandler(mockValidateMutantUC)
-	information := vm.getBodyOfRequest(events.APIGatewayProxyRequest{Body: string(data)})
+	information, _ := vm.getBodyOfRequest(events.APIGatewayProxyRequest{Body: string(data)})
 	mockValidateMutantUC.On("Handler", information).Return(false, nil)
 
 	response, _ := vm.Handle(events.APIGatewayProxyRequest{Body: string(data)})
@@ -42,7 +42,7 @@ func TestValidateMutantHandleNotFindsMutant(t *testing.T) {
 	data, _ := json.Marshal(dna)
 	mockValidateMutantUC := &ValidateMutantUCMock{}
 	vm := NewHandler(mockValidateMutantUC)
-	information := vm.getBodyOfRequest(events.APIGatewayProxyRequest{Body: string(data)})
+	information, _ := vm.getBodyOfRequest(events.APIGatewayProxyRequest{Body: string(data)})
 	mockValidateMutantUC.On("Handler", information).Return(false, errorExpected)
 
 	response, _ := vm.Handle(events.APIGatewayProxyRequest{Body: string(data)})
