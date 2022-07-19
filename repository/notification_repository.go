@@ -1,10 +1,11 @@
 package repository
 
 import (
+	"log"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/sns"
 	"github.com/aws/aws-sdk-go/service/sns/snsiface"
-	"log"
 )
 
 type NotificationRepository struct {
