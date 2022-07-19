@@ -29,23 +29,6 @@ Una vez se finaliza el proceso de validación se emite una notificación a un t�
 * Api Gateway
 * CloudWatch
 
-## Servicios Rest
-
-*	/mutant<br>
-     Servicio POST que recibe un Json con el siguiente formato
-
-{
-
-"dna":["ATGCGA","CCGTAC","TAAAGA","AAAAGG","CTTAGA","TCAGTA"]
-}
-
-### Códigos de respuesta
-
-* 200 - Ok
-* 403 - Forbidden 
-* 400 - Bad request
-
-
 ## Pruebas unitarias
 Cobertura 92.3%
 Uso de https://github.com/vektra/mockery en generación de mocks
